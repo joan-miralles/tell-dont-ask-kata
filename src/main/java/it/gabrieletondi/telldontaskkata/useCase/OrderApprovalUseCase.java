@@ -1,7 +1,6 @@
 package it.gabrieletondi.telldontaskkata.useCase;
 
 import it.gabrieletondi.telldontaskkata.domain.Order;
-import it.gabrieletondi.telldontaskkata.domain.OrderStatus;
 import it.gabrieletondi.telldontaskkata.repository.OrderRepository;
 
 public class OrderApprovalUseCase {
@@ -13,20 +12,27 @@ public class OrderApprovalUseCase {
 
     public void run(OrderApprovalRequest request) {
         final Order order = orderRepository.getById(request.getOrderId());
+        checkOrderApprovalRules(request, order);
+        if (request.isApproved()) {
+            order.approve();
+        } else {
+            order.reject();
+        }
+        orderRepository.save(order);
+    }
 
-        if (order.getStatus().equals(OrderStatus.SHIPPED)) {
+    private void checkOrderApprovalRules(OrderApprovalRequest request, Order order) {
+        if (order.isShipped()) {
             throw new ShippedOrdersCannotBeChangedException();
         }
 
-        if (request.isApproved() && order.getStatus().equals(OrderStatus.REJECTED)) {
+        if (request.isApproved() && order.isRejected()) {
             throw new RejectedOrderCannotBeApprovedException();
         }
 
-        if (!request.isApproved() && order.getStatus().equals(OrderStatus.APPROVED)) {
+        if (!request.isApproved() && order.isApproved()) {
             throw new ApprovedOrderCannotBeRejectedException();
         }
-
-        order.setStatus(request.isApproved() ? OrderStatus.APPROVED : OrderStatus.REJECTED);
-        orderRepository.save(order);
     }
+
 }

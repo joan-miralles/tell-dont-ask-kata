@@ -59,4 +59,24 @@ public class Order {
         this.total = this.total.add(orderItem.getTaxedAmount());
         this.tax = this.tax.add(orderItem.getTax());
     }
+
+    public boolean isShipped() {
+        return this.getStatus().equals(OrderStatus.SHIPPED);
+    }
+
+    public boolean isRejected() {
+        return this.getStatus().equals(OrderStatus.REJECTED);
+    }
+
+    public boolean isApproved() {
+        return this.getStatus().equals(OrderStatus.APPROVED);
+    }
+
+    public void approve() {
+        this.status = OrderStatus.APPROVED;
+    }
+
+    public void reject() {
+        this.status = OrderStatus.REJECTED;
+    }
 }
