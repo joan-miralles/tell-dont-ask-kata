@@ -5,9 +5,9 @@ import it.gabrieletondi.telldontaskkata.domain.OrderMother;
 import it.gabrieletondi.telldontaskkata.doubles.TestOrderRepository;
 import org.junit.Test;
 
-import static it.gabrieletondi.telldontaskkata.domain.OrderApprovalRequestMother.approvedRequest;
-import static it.gabrieletondi.telldontaskkata.domain.OrderApprovalRequestMother.rejectedRequest;
 import static it.gabrieletondi.telldontaskkata.domain.OrderMother.initialOrder;
+import static it.gabrieletondi.telldontaskkata.useCase.OrderApprovalRequest.approvedRequest;
+import static it.gabrieletondi.telldontaskkata.useCase.OrderApprovalRequest.rejectedRequest;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -21,7 +21,7 @@ public class OrderApprovalUseCaseTest {
     public void approvedExistingOrder() throws Exception {
         orderRepository.addOrder(initialOrder());
 
-        orderApprovalUseCase.run(approvedRequest());
+        orderApprovalUseCase.run(approvedRequest(1));
 
         final Order savedOrder = orderRepository.getSavedOrder();
         assertTrue(savedOrder.isApproved());
@@ -31,7 +31,7 @@ public class OrderApprovalUseCaseTest {
     public void rejectedExistingOrder() throws Exception {
         orderRepository.addOrder(initialOrder());
 
-        orderApprovalUseCase.run(rejectedRequest());
+        orderApprovalUseCase.run(rejectedRequest(1));
 
         final Order savedOrder = orderRepository.getSavedOrder();
         assertTrue(savedOrder.isRejected());
@@ -41,7 +41,7 @@ public class OrderApprovalUseCaseTest {
     public void cannotApproveRejectedOrder() throws Exception {
         orderRepository.addOrder(OrderMother.initialRejectedOrder());
 
-        orderApprovalUseCase.run(approvedRequest());
+        orderApprovalUseCase.run(approvedRequest(1));
 
         assertThat(orderRepository.getSavedOrder(), is(nullValue()));
     }
@@ -50,7 +50,7 @@ public class OrderApprovalUseCaseTest {
     public void cannotRejectApprovedOrder() throws Exception {
         orderRepository.addOrder(OrderMother.initialApprovedOrder());
 
-        orderApprovalUseCase.run(rejectedRequest());
+        orderApprovalUseCase.run(rejectedRequest(1));
 
         assertThat(orderRepository.getSavedOrder(), is(nullValue()));
     }
@@ -59,7 +59,7 @@ public class OrderApprovalUseCaseTest {
     public void shippedOrdersCannotBeApproved() throws Exception {
         orderRepository.addOrder(OrderMother.initialShippedOrder());
 
-        orderApprovalUseCase.run(approvedRequest());
+        orderApprovalUseCase.run(approvedRequest(1));
 
         assertThat(orderRepository.getSavedOrder(), is(nullValue()));
     }

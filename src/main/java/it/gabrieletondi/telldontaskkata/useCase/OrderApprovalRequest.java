@@ -4,16 +4,22 @@ public class OrderApprovalRequest {
     private int orderId;
     private boolean approved;
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public static OrderApprovalRequest approvedRequest(int orderId) {
+        OrderApprovalRequest orderApprovalRequest = new OrderApprovalRequest();
+        orderApprovalRequest.orderId = orderId;
+        orderApprovalRequest.approved = true;
+        return orderApprovalRequest;
+    }
+
+    public static OrderApprovalRequest rejectedRequest(int orderId) {
+        OrderApprovalRequest rejectedRequest = new OrderApprovalRequest();
+        rejectedRequest.orderId = orderId;
+        rejectedRequest.approved = false;
+        return rejectedRequest;
     }
 
     public int getOrderId() {
         return orderId;
-    }
-
-    public void setApproved(boolean approved) {
-        this.approved = approved;
     }
 
     public boolean isApproved() {
