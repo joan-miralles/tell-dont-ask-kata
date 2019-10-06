@@ -69,4 +69,10 @@ public class Order {
     public void setId(int id) {
         this.id = id;
     }
+
+    public void addItem(OrderItem orderItem) {
+        this.getItems().add(orderItem);
+        this.total = this.total.add(orderItem.getTaxedAmount());
+        this.tax = this.tax.add(orderItem.getTax());
+    }
 }
