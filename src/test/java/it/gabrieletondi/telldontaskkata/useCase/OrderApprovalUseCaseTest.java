@@ -64,12 +64,4 @@ public class OrderApprovalUseCaseTest {
         assertThat(orderRepository.getSavedOrder(), is(nullValue()));
     }
 
-    @Test(expected = ShippedOrdersCannotBeChangedException.class)
-    public void shippedOrdersCannotBeRejected() throws Exception {
-        orderRepository.addOrder(OrderMother.initialShippedOrder());
-
-        orderApprovalUseCase.run(rejectedRequest());
-
-        assertThat(orderRepository.getSavedOrder(), is(nullValue()));
-    }
 }
