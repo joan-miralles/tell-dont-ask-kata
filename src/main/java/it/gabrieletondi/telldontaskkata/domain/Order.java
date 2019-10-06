@@ -12,7 +12,15 @@ public class Order {
     private OrderStatus status;
     private int id;
 
-    public static Order createOrder() {
+    public Order() {
+    }
+
+    public Order(int id) {
+        this.id = id;
+        this.status = OrderStatus.CREATED;
+    }
+
+    public static Order create() {
         Order order = new Order();
         order.status = OrderStatus.CREATED;
         order.items = new ArrayList<>();
@@ -42,22 +50,18 @@ public class Order {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void addItem(OrderItem orderItem) {
         this.getItems().add(orderItem);
         this.total = this.total.add(orderItem.getTaxedAmount());
         this.tax = this.tax.add(orderItem.getTax());
+    }
+
+    public boolean isCreated() {
+        return this.getStatus().equals(OrderStatus.CREATED);
     }
 
     public boolean isShipped() {
@@ -78,5 +82,9 @@ public class Order {
 
     public void reject() {
         this.status = OrderStatus.REJECTED;
+    }
+
+    public void ship() {
+        this.status = OrderStatus.SHIPPED;
     }
 }
