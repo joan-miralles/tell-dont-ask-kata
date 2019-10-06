@@ -6,19 +6,17 @@ public class Category {
     private String name;
     private BigDecimal taxPercentage;
 
-    public String getName() {
-        return name;
+    public Category(String name, BigDecimal taxPercentage) {
+        this.name = name;
+        this.taxPercentage = taxPercentage;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getName() {
+        return name;
     }
 
     public BigDecimal getTaxPercentage() {
         return taxPercentage;
     }
 
-    public void setTaxPercentage(BigDecimal taxPercentage) {
-        this.taxPercentage = taxPercentage;
-    }
 }
