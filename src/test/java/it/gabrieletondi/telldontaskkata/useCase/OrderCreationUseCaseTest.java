@@ -10,9 +10,7 @@ import it.gabrieletondi.telldontaskkata.repository.ProductCatalog;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -42,20 +40,13 @@ public class OrderCreationUseCaseTest {
 
     @Test
     public void sellMultipleItems() throws Exception {
-        SellItemRequest saladRequest = new SellItemRequest();
-        saladRequest.setProductName("salad");
-        saladRequest.setQuantity(2);
+        SellItemRequest saladRequest = new SellItemRequest("salad", 2);
+        SellItemRequest tomatoRequest = new SellItemRequest("tomato", 3);
+        final SellItemsRequest sellItemsRequest = new SellItemsRequest();
+        sellItemsRequest.addSellItem(saladRequest);
+        sellItemsRequest.addSellItem(tomatoRequest);
 
-        SellItemRequest tomatoRequest = new SellItemRequest();
-        tomatoRequest.setProductName("tomato");
-        tomatoRequest.setQuantity(3);
-
-        final SellItemsRequest request = new SellItemsRequest();
-        request.setRequests(new ArrayList<>());
-        request.getRequests().add(saladRequest);
-        request.getRequests().add(tomatoRequest);
-
-        useCase.run(request);
+        useCase.run(sellItemsRequest);
 
         final Order insertedOrder = orderRepository.getSavedOrder();
         assertThat(insertedOrder.getStatus(), is(OrderStatus.CREATED));
@@ -76,13 +67,11 @@ public class OrderCreationUseCaseTest {
     }
 
     @Test(expected = UnknownProductException.class)
-    public void unknownProduct() throws Exception {
-        SellItemsRequest request = new SellItemsRequest();
-        request.setRequests(new ArrayList<>());
-        SellItemRequest unknownProductRequest = new SellItemRequest();
-        unknownProductRequest.setProductName("unknown product");
-        request.getRequests().add(unknownProductRequest);
+    public void unknownProduct() {
+        SellItemsRequest sellItemsRequest = new SellItemsRequest();
+        SellItemRequest unknownProductRequest = new SellItemRequest("unknown product", 1);
+        sellItemsRequest.addSellItem(unknownProductRequest);
 
-        useCase.run(request);
+        useCase.run(sellItemsRequest);
     }
 }

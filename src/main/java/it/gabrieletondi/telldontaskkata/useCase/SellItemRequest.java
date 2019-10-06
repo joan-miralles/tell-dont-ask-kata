@@ -1,15 +1,12 @@
 package it.gabrieletondi.telldontaskkata.useCase;
 
 public class SellItemRequest {
-    private int quantity;
-    private String productName;
+    private final int quantity;
+    private final String productName;
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setProductName(String productName) {
+    public SellItemRequest(String productName, int quantity) {
         this.productName = productName;
+        this.quantity = quantity;
     }
 
     public int getQuantity() {
